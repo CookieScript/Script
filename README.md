@@ -13,6 +13,8 @@ loadstring(game:HttpGet(""))()
 
 # Key
 
-'''
-"Here"
-'''
+```
+"Here" --[[ Key Only
+Appears here sometimes
+--]]
+```
