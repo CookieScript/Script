@@ -14,9 +14,5 @@ loadstring(game:HttpGet(""))()
 # Key
 
 '''
---[[ only appears if
-i want to leak the key
---]]
-
 "Here"
 '''
