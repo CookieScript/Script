@@ -14,7 +14,7 @@ loadstring(game:HttpGet(""))()
 # Key
 
 ```
-"Here" --[[ Key Only
+"Key" --[[ Key Only
 Appears here sometimes
 --]]
 ```
