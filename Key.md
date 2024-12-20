@@ -1,7 +1,8 @@
 # Key
 
 ```
-"Key" --[[ Key Only
-Appears here sometimes
---]]
+"Key"
 ```
+
+Key Only
+Appears here sometimes
