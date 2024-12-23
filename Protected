@@ -1,238 +1,312 @@
-local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/CookieScript/Mobile/refs/heads/main/Criminallity'))()
+Script_Key = "Virtual"
 
+-- Locals
+local player = game.Players.LocalPlayer
 
-
-local window = library.new('Virtual.lol | Beta | Mobile Support ', 'leadmarker')
-
-
--- Tabs
-local tab = window.new_tab('rbxassetid://12977951813')
-local tab1 = window.new_tab('rbxassetid://12978048207')
-local tab2 = window.new_tab('rbxassetid://12978113090')
-
-
--- Sections
-local section = tab.new_section('Aimbots')
-local section1 = tab1.new_section('Anti Aim')
-local section3 = tab2.new_section('Settings')
-
--- Sector
-local sector = section.new_sector('Aimbot Settings', 'Left')
-local sector1 = section.new_sector('Orbit', 'Left')
-local sector2 = section1.new_sector('Anti Settings', 'Left')
-local sector3 = section3.new_sector('Misc', 'Left')
-
-local Targetaim = {
-    Enabled = true,
-    Keybind = "nil",
-    Hitpart = "HumanoidRootPart",
-    Prediction = {
-        X = nil,
-        Y = nil,
-    },
-    JumpOffset = nil,
-    Notify = false,
-    Tracers = {
-        Enabled = false,
-        Color = "Color3.fromRGB(185, 58, 185)",
-        Transparency = 1,
-        Thickness = 1.3,
-    },
-    Fov = {
-        Enabled = false,
-        Transparency = 1,
-        Radius = 100,
-        Color = "Color3.fromRGB(185, 58, 185)",
-        Thickness = 1.3,
-    },
-}
-
-local AntiAim = {
-    Enabled = false,
-
-    Type = "CframeDesync",
-
-    Velx = "nil",
-    Vely = "nil",
-    Velz = "nil",
-}
-
-local toggle = sector.element('Toggle', 'Enabled', false, function(value)
-   print(value.Enabled)
-end)
-
-local toggle = sector.element('Toggle', 'Resolver', false, function(resolve)
-   print(resolve.Resolver)
-end)
-
-local toggle = sector.element('Toggle', 'Silent aim', false, function(value)
-   Targetaim.Enabled = value.Silent.aim
-end)
-
-local toggle = sector.element('Toggle', 'Aim assist', false, function(value)
-   print(value.Aim.assist)
-end)
-
-local slider = sector.element('Slider', 'Prediction X', {default = {min = 0, max = 100, default = 0}}, function(v)
-   print(v.Prediction.X)
-end)
-
-local slider = sector.element('Slider', 'Prediction Y', {default = {min = 0, max = 100, default = 0}}, function(v)
-   print(v.Prediction.Y)
-end)
-
-local toggle = sector.element('Toggle', 'Auto Pred', false, function(value)
-   print(value.Auto.Pred)
-end)
-
-local slider = sector.element('Slider', 'Auto Pred Calculator', {default = {min = 0, max = 500, default = 255}}, function(v)
-   print(v.Auto.Pred.Calculator)
-end)
-
-local slider = sector.element('Slider', 'Jump Offset', {default = {min = -100, max = 100, default = 0}}, function(v)
-   print(v.Jump.Offset)
-end)
-
-local dropdown = sector.element('Dropdown', 'Hitpart', {options = {"Head", "HumanoidRootPart", "UpperTorso", "LowerTorso", "LeftUpperArm", "RightUpperArm", "LeftLowerArm", "RightLowerArm", "LeftHand", "RightHand", "LeftFoot", "LeftLowerLeg",  "LeftUpperLeg", "RightLowerLeg", "RightFoot",  "RightUpperLeg"}}, function(v)
-   Targetaim.Hitpart = v.Hitpart
-end)
-
-local dropdown = sector.element('Dropdown', 'Keybind', {options = {"q", "e", "z", "c"}}, function(v)
-   Targetaim.Keybind = v.Keybind
-end)
-
--- Anti Aim
-
-local toggle = sector2.element('Toggle', 'Enabled', false, function(value)
-   print(value.Enabled)
-end)
-
-local dropdown = sector2.element('Dropdown', 'Type', {options = {'CframeDesync', 'Velocity'}}, function(v)
-   print(v.Type)
-end)
-
-local slider = sector2.element('Slider', 'Vel X', {default = {min = -1000, max = 1000, default = 0}}, function(v)
-   print(v.Vel.X)
-end)
-
-local slider = sector2.element('Slider', 'Vel Y', {default = {min = -1000, max = 1000, default = 0}}, function(v)
-   print(v.Vel.Y)
-end)
-
-local slider = sector2.element('Slider', 'Vel Z', {default = {min = -1000, max = 1000, default = 0}}, function(v)
-   print(v.Vel.Z)
-end)
-
--- Function
-
-Targetaim.Prediction.X = Targetaim.Prediction.X / 100
-Targetaim.Prediction.Y = Targetaim.Prediction.Y / 10100
-Targetaim.JumpOffset = Targetaim.JumpOffset / 100
-
-local CurrentCamera = game:GetService("Workspace").CurrentCamera
-local Inset = game:GetService("GuiService"):GetGuiInset().Y
-local RunService = game:GetService("RunService")
-local Mouse = game.Players.LocalPlayer:GetMouse()
-local LocalPlayer = game.Players.LocalPlayer
-
-local Line = Drawing.new("Line")
-local Circle = Drawing.new("Circle")
-local Plr
-
-Mouse.KeyDown:Connect(function(KeyPressed)
-    if KeyPressed == Targetaim.Keybind then
-        if Targetaim.Enabled then
-            Targetaim.Enabled = false
-            if Targetaim.Notify then
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Trace",
-                    Text = "Unlocked"
-                })
-            end
-        else
-            Plr = FindClosestPlayer()
-            Targetaim.Enabled = true
-            if Targetaim.Notify then
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Trace",
-                    Text = "Locked On: " .. tostring(Plr.Character.Humanoid.DisplayName)
-                })
-            end
-        end
-    end
-end)
-
-function FindClosestPlayer()
-    local ClosestDistance, ClosestPlayer = math.huge, nil
-    for _, Player in ipairs(game:GetService("Players"):GetPlayers()) do
-        local ISNTKNOCKED = Player.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
-        local ISNTGRABBED = Player.Character:FindFirstChild("GRABBING_CONSTRAINT") == nil
-
-        if Player ~= LocalPlayer then
-            local Character = Player.Character
-            if Character and Character.Humanoid.Health > 1 and ISNTKNOCKED and ISNTGRABBED then
-                local Position, IsVisibleOnViewPort = CurrentCamera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
-                if IsVisibleOnViewPort then
-                    local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Position.X, Position.Y)).Magnitude
-                    if Distance < ClosestDistance then
-                        ClosestPlayer = Player
-                        ClosestDistance = Distance
-                    end
-                end
-            end
-        end
-    end
-    return ClosestPlayer, ClosestDistance
+if (Script_Key) ~= "Virtual" then
+    player:Kick("Wrong Key")
 end
 
-RunService.Heartbeat:Connect(function()
-    if Targetaim.Enabled and Plr and Plr.Character and Plr.Character:FindFirstChild(Targetaim.Hitpart) then
-        local AimPart = Plr.Character[Targetaim.Hitpart]
-        local Velocity = AimPart.Velocity
-        local AdjustedYPrediction = Targetaim.Prediction.Y - (Targetaim.JumpOffset / 10)
 
-        local PredictedPosition = AimPart.Position +
-                                  (Velocity * Targetaim.Prediction.X) +
-                                  Vector3.new(0, Velocity.Y * AdjustedYPrediction, 0)
+local repo = 'https://raw.githubusercontent.com/LionTheGreatRealFrFr/MobileLinoriaLib/main/'
 
-        local Vector = CurrentCamera:WorldToViewportPoint(PredictedPosition)
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
-        if Targetaim.Tracers.Enabled then
-            Line.Color = loadstring("return " .. Targetaim.Tracers.Color)()
-            Line.Transparency = Targetaim.Tracers.Transparency
-            Line.Thickness = Targetaim.Tracers.Thickness
-            Line.From = Vector2.new(Mouse.X, Mouse.Y + Inset)
-            Line.To = Vector2.new(Vector.X, Vector.Y)
-            Line.Visible = true
-        else
-            Line.Visible = false
+local Window = Library:CreateWindow({
+    Title = 'Virtual | Beta | mob support',
+    Center = true,
+    AutoShow = true,
+    TabPadding = 8,
+    MenuFadeTime = 0.2
+})
+
+
+local Tabs = {
+    Main = Window:AddTab('legit'),
+    ['UI Settings'] = Window:AddTab('Settings'),
+}
+
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Target aim')
+local RightGroupBox = Tabs.Main:AddRightGroupbox('Aimbot camera')
+
+
+local TabBox = Tabs.Main:AddLeftTabbox()
+
+local Tab1 = TabBox:AddTab('legit')
+local Tab2 = TabBox:AddTab('Tab 2')
+
+
+
+LeftGroupBox:AddToggle('MyToggle', {
+    Text = 'Enabled',
+    Default = false,
+    Tooltip = 'Enable the target aim',
+
+    Callback = function(Value)
+        print('[cb] MyToggle changed to:', Value)
+    end
+})
+
+
+Toggles.MyToggle:OnChanged(function()
+    print('MyToggle changed to:', Toggles.MyToggle.Value)
+end)
+
+
+Toggles.MyToggle:SetValue(false)
+
+
+--[[
+    Groupbox:AddButton
+    Arguments: {
+        Text = string,
+        Func = function,
+        DoubleClick = boolean
+        Tooltip = string,
+    }
+
+    You can call :AddButton on a button to add a SubButton!
+]]
+
+local MyButton = LeftGroupBox:AddButton('Button', function()
+    print('You clicked a button!')
+end)
+
+local MyButton2 = MyButton:AddButton('Sub button', function()
+    print('You clicked a sub button!')
+end)
+
+
+LeftGroupBox:AddLabel('This is a label')
+LeftGroupBox:AddLabel('This is a label\n\nwhich wraps its text!', true)
+
+
+LeftGroupBox:AddDivider()
+
+
+
+LeftGroupBox:AddInput('MyTextbox', {
+    Default = 'pred',
+    Numeric = true,
+    Finished = false,
+
+    Text = 'Prediction X',
+    Tooltip = 'This is prediction x Where ppl move and theres a pred when they move', -- Information shown when you hover over the textbox
+
+    Placeholder = '1', 
+
+    Callback = function(Value)
+        print('[cb] Text updated. New text:', Value)
+    end
+})
+
+Options.MyTextbox:OnChanged(function()
+    print('Text updated. New text:', Options.MyTextbox.Value)
+end)
+
+LeftGroupBox:AddDropdown('MyDropdown', {
+    Values = { 'Head', 'HumanoidRootPart', 'UpperTorso', 'LowerTorso' },
+    Default = 1,
+    Multi = false,
+
+    Text = 'Hitpart',
+    Tooltip = 'Where you aim',
+
+    Callback = function(Value)
+        print('[cb] Dropdown got changed. New value:', Value)
+    end
+})
+
+Options.MyDropdown:OnChanged(function()
+    print('Dropdown got changed. New value:', Options.MyDropdown.Value)
+end)
+
+Options.MyDropdown:SetValue('This')
+
+
+LeftGroupBox:AddLabel('Color'):AddColorPicker('ColorPicker', {
+    Default = Color3.new(0, 1, 0), -- Bright green
+    Title = 'Some color', -- Optional. Allows you to have a custom color picker title (when you open it)
+    Transparency = 0, -- Optional. Enables transparency changing for this color picker (leave as nil to disable)
+
+    Callback = function(Value)
+        print('[cb] Color changed!', Value)
+    end
+})
+
+Options.ColorPicker:OnChanged(function()
+    print('Color changed!', Options.ColorPicker.Value)
+    print('Transparency changed!', Options.ColorPicker.Transparency)
+end)
+
+Options.ColorPicker:SetValueRGB(Color3.fromRGB(0, 255, 140))
+
+-- Label:AddKeyPicker
+-- Arguments: Idx, Info
+
+LeftGroupBox:AddLabel('Keybind'):AddKeyPicker('KeyPicker', {
+    -- SyncToggleState only works with toggles.
+    -- It allows you to make a keybind which has its state synced with its parent toggle
+
+    -- Example: Keybind which you use to toggle flyhack, etc.
+    -- Changing the toggle disables the keybind state and toggling the keybind switches the toggle state
+
+    Default = 'MB2', -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+    SyncToggleState = false,
+
+
+    -- You can define custom Modes but I have never had a use for it.
+    Mode = 'Toggle', -- Modes: Always, Toggle, Hold
+
+    Text = 'Auto lockpick safes', -- Text to display in the keybind menu
+    NoUI = false, -- Set to true if you want to hide from the Keybind menu,
+
+    -- Occurs when the keybind is clicked, Value is `true`/`false`
+    Callback = function(Value)
+        print('[cb] Keybind clicked!', Value)
+    end,
+
+    -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+    ChangedCallback = function(New)
+        print('[cb] Keybind changed!', New)
+    end
+})
+
+-- OnClick is only fired when you press the keybind and the mode is Toggle
+-- Otherwise, you will have to use Keybind:GetState()
+Options.KeyPicker:OnClick(function()
+    print('Keybind clicked!', Options.KeyPicker:GetState())
+end)
+
+Options.KeyPicker:OnChanged(function()
+    print('Keybind changed!', Options.KeyPicker.Value)
+end)
+
+task.spawn(function()
+    while true do
+        wait(1)
+
+        -- example for checking if a keybind is being pressed
+        local state = Options.KeyPicker:GetState()
+        if state then
+            print('KeyPicker is being held down')
         end
 
-        Circle.Position = Vector2.new(Mouse.X, Mouse.Y + Inset)
-        Circle.Visible = Targetaim.Fov.Enabled
-        Circle.Thickness = Targetaim.Fov.Thickness
-        Circle.Radius = Targetaim.Fov.Radius
-        Circle.Color = loadstring("return " .. Targetaim.Fov.Color)()
-    else
-        Line.Visible = false
-        Circle.Visible = false
+        if Library.Unloaded then break end
     end
 end)
 
-local rawmetatable = getrawmetatable(game)
-local old = rawmetatable.__namecall
-setreadonly(rawmetatable, false)
-rawmetatable.__namecall = newcclosure(function(...)
-    local args = {...}
-    if Targetaim.Enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
-        local AimPart = Plr.Character[Targetaim.Hitpart]
-        local Velocity = AimPart.Velocity
-        local AdjustedYPrediction = Targetaim.Prediction.Y - (Targetaim.JumpOffset / 10)
+Options.KeyPicker:SetValue({ 'MB2', 'Toggle' }) -- Sets keybind to MB2, mode to Hold
 
-        args[3] = AimPart.Position +
-                  (Velocity * Targetaim.Prediction.X) +
-                  Vector3.new(0, Velocity.Y * AdjustedYPrediction, 0)
-        return old(unpack(args))
-    end
-    return old(...)
+-- Long text label to demonstrate UI scrolling behaviour.
+local LeftGroupBox2 = Tabs.Main:AddLeftGroupbox('Groupbox #2');
+LeftGroupBox2:AddLabel('Oh no...\nThis label spans multiple lines!\n\nWe\'re gonna run out of UI space...\nJust kidding! Scroll down!\n\n\nHello from below!', true)
+
+local TabBox = Tabs.Main:AddRightTabbox() -- Add Tabbox on right side
+
+-- Anything we can do in a Groupbox, we can do in a Tabbox tab (AddToggle, AddSlider, AddLabel, etc etc...)
+local Tab1 = TabBox:AddTab('Tab 1')
+Tab1:AddToggle('Tab1Toggle', { Text = 'Tab1 Toggle' });
+
+local Tab2 = TabBox:AddTab('Tab 2')
+Tab2:AddToggle('Tab2Toggle', { Text = 'Tab2 Toggle' });
+
+-- Dependency boxes let us control the visibility of UI elements depending on another UI elements state.
+-- e.g. we have a 'Feature Enabled' toggle, and we only want to show that features sliders, dropdowns etc when it's enabled!
+-- Dependency box example:
+local RightGroupbox = Tabs.Main:AddRightGroupbox('Groupbox #3');
+RightGroupbox:AddToggle('ControlToggle', { Text = 'Dependency box toggle' });
+
+local Depbox = RightGroupbox:AddDependencyBox();
+Depbox:AddToggle('DepboxToggle', { Text = 'Sub-dependency box toggle' });
+
+-- We can also nest dependency boxes!
+-- When we do this, our SupDepbox automatically relies on the visiblity of the Depbox - on top of whatever additional dependencies we set
+local SubDepbox = Depbox:AddDependencyBox();
+SubDepbox:AddSlider('DepboxSlider', { Text = 'Slider', Default = 50, Min = 0, Max = 100, Rounding = 0 });
+SubDepbox:AddDropdown('DepboxDropdown', { Text = 'Dropdown', Default = 1, Values = {'a', 'b', 'c'} });
+
+Depbox:SetupDependencies({
+    { Toggles.ControlToggle, true } -- We can also pass `false` if we only want our features to show when the toggle is off!
+});
+
+SubDepbox:SetupDependencies({
+    { Toggles.DepboxToggle, true }
+});
+
+-- Library functions
+-- Sets the watermark visibility
+Library:SetWatermarkVisibility(true)
+
+-- Example of dynamically-updating watermark with common traits (fps and ping)
+local FrameTimer = tick()
+local FrameCounter = 0;
+local FPS = 60;
+
+local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+    FrameCounter += 1;
+
+    if (tick() - FrameTimer) >= 1 then
+        FPS = FrameCounter;
+        FrameTimer = tick();
+        FrameCounter = 0;
+    end;
+
+    Library:SetWatermark(('LinoriaLib demo | %s fps | %s ms'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
+    ));
+end);
+
+Library.KeybindFrame.Visible = true; -- todo: add a function for this
+
+Library:OnUnload(function()
+    WatermarkConnection:Disconnect()
+
+    print('Unloaded!')
+    Library.Unloaded = true
 end)
+
+-- UI Settings
+local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+
+-- I set NoUI so it does not show up in the keybinds menu
+MenuGroup:AddButton('Unload', function() Library:Unload() end)
+MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
+
+Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
+
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- ThemeManager (Allows you to have a menu theme system)
+
+-- Hand the library over to our managers
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+ThemeManager:SetFolder('MyScriptHub')
+SaveManager:SetFolder('MyScriptHub/specific-game')
+
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(Tabs['UI Settings'])
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
