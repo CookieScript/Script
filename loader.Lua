@@ -1,5 +1,16 @@
+Script_Key = "OnshuVFTJanaiUgF"
+getgenv().ChatLoad = true
 
 
+
+--[[
+
+
+Original Name of Virtual
+
+Virtual.lol | Beta | 💲Paid | 12/22/24 |
+
+--]]
 
 
 -- Locals
@@ -807,6 +818,44 @@ end)
 hookfunction(game.Players.LocalPlayer.IsInGroup, function() return true end)
 
 
+--[[
+
+
+local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+    local split = string.split(pingvalue,'(')
+    local ping = tonumber(split[1])
+    if ping < 200 then
+        
+    elseif ping < 185 then
+        
+    elseif ping < 168 then
+        
+    elseif ping < 145 then
+        
+    elseif ping < 125 then
+        
+    elseif ping < 110 then
+        
+    elseif ping < 105 then
+        
+    elseif ping < 90 then
+        
+    elseif ping < 80 then
+        
+    elseif ping < 70 then
+        
+    elseif ping < 60 then
+        
+    elseif ping < 50 then
+        
+    elseif ping < 40 then
+        
+    end
+end
+
+
+--]]
+
 
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/khen791/libraryskibidi/refs/heads/main/LinoriaLib.lua.txt"))()
@@ -815,21 +864,33 @@ Library:Notify('Virtual Loading..')
 wait(1)
 
 
+if getgenv().ChatLoad then
+    local args = {
+        [1] = "Virtual on top",
+        [2] = "All"
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(unpack(args))
+end
+
+
+
+
 local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/khen791/libraryskibidi/refs/heads/main/ThemeManager.lua.txt"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/khen791/libraryskibidi/refs/heads/main/SaveManager.lua.txt"))()
 local Window = Library:CreateWindow({
-    Title = 'Virtual.lol | Beta | 💲Paid | 12/22/24 |',
+    Title = 'Virtual.lol | v0.0.1 | Beta',
     Center = true,
     AutoShow = true,
-    TabPadding = 8,
-    MenuFadeTime = 0.2,
+    TabPadding = 8, -- Original 8
+    MenuFadeTime = 0.2, -- Original 0.2
     Size = UDim2.new(0, 395, 0, 430)
 })
 local Tabs = {
     Main = Window:AddTab('Combat'),
     visuals = Window:AddTab('Visuals'),
     misc = Window:AddTab('Miscellaneous'),
-    ['UI Settings'] = Window:AddTab('UI Settings')
+    ['UI Settings'] = Window:AddTab('Settings')
     
 }
 
@@ -894,7 +955,7 @@ aimbot:AddInput('PredictionBox', {
     end
 })
 aimbot:AddDropdown('hitparts', {
-    Values = { 'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso' },
+    Values = { 'Head', 'HumanoidRootPart', 'UpperTorso', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot', 'RightUpperLeg' },
     Default = 'UpperTorso',
     Multi = false,
 
@@ -1044,6 +1105,41 @@ aimbot:AddSlider('sizebutton', {
                 toggleButton.Position = UDim2.new(currentPosition.X.Scale, currentPosition.X.Offset, currentPosition.Y.Scale, currentPosition.Y.Offset)
             end
         end
+    end
+})
+
+aimbot:AddToggle('predca', {
+    Text = 'Auto Pred',
+    Default = false, 
+    Tooltip = nil,
+
+    Callback = function(Value)
+        
+    end
+})
+
+aimbot:AddDropdown('predcal', {
+    Values = { 'Calculation', 'Ping Based', 'Blatant', 'AdvanceCalculation' },
+    Default = 'Ping Based',
+    Multi = false,
+
+    Text = 'Auto Pred Type',
+    Tooltip = nil, 
+    Callback = function(uwu)
+        
+    end
+})
+
+aimbot:AddSlider('predcall', {
+    Text = 'Auto Pred Calculate',
+    Default = 255,
+    Min = 0,
+    Max = 1000,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(jairok)
+        
     end
 })
 
@@ -2078,7 +2174,7 @@ local LocalRootPart = LocalHumanoid.RootPart or LocalCharacter:WaitForChild("Hum
 local hcswitchEnabled = false 
 
 local hcswitchyy = hcswitch:AddButton({
-    Text = 'Enable switch',
+    Text = 'Enable Auto Shoot',
     Func = function()
         hcswitchEnabled = not hcswitchEnabled
     end,
@@ -2104,7 +2200,7 @@ RunService.PostSimulation:Connect(function(DeltaTime)
 end)
 
 hcswitch:AddButton({
-    Text = "Load switch button",
+    Text = "Load Auto Shoot",
     Func = function()
        local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -2174,6 +2270,7 @@ end
 })
 
 
+-- Settings
 
 -- UI Settings
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
@@ -2204,8 +2301,8 @@ SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 -- use case for doing it this way:
 -- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
-ThemeManager:SetFolder('ezkid')
-SaveManager:SetFolder('ezkid/specific-game')
+ThemeManager:SetFolder('Virtual')
+SaveManager:SetFolder('Virtual/specific-game')
 
 -- Builds our config menu on the right side of our tab
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
