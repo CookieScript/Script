@@ -1178,7 +1178,7 @@ aimbot:AddSlider('smoothness', {
     Text = 'GroundSmoothness',
     Default = 1,
     Min = 0,
-    Max = 1,
+    Max = 10,
     Rounding = 2,
     Compact = false,
 
@@ -1190,7 +1190,7 @@ aimbot:AddSlider('smoothness1', {
     Text = 'AirSmoothness',
     Default = 1,
     Min = 0,
-    Max = 1,
+    Max = 10,
     Rounding = 2,
     Compact = false,
 
@@ -1753,7 +1753,7 @@ utilities:AddButton({
 
         local button = Instance.new("ImageButton")
         button.Name = "CFrameButton"
-        button.Image = "rbxassetid://136981484761911"
+        button.Image ="rbxasset://textures/ui/mouseLock_off@2x.png"
         button.Size = UDim2.new(0, 100, 0, 100)
         button.Position = UDim2.new(0, 10, 0, 10)
         button.BackgroundTransparency = 1
@@ -2036,7 +2036,7 @@ autoair:AddSlider('autoairdelay', {
 
     Callback = function(Value)
         KingVon.Random.AutoAirDelay = Value
-            end
+    end
 })
 selfvis:AddToggle('forcefield', {
     Text = 'Forcefield',
@@ -2274,6 +2274,29 @@ local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 -- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
 MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
+
+-- Watermark
+Library:SetWatermarkVisibility(true)
+
+
+local FrameTimer = tick()
+local FrameCounter = 0;
+local FPS = 60;
+
+local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+    FrameCounter += 1;
+
+    if (tick() - FrameTimer) >= 1 then
+        FPS = FrameCounter;
+        FrameTimer = tick();
+        FrameCounter = 0;
+    end;
+
+    Library:SetWatermark(('Virtual.lol | v0.0.1 | Beta | %s fps | %s ms'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
+    ));
+end);
 
 
 Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
