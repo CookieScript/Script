@@ -1,5 +1,4 @@
-Script_Key = "OnshuVFTJanaiUgF"
-getgenv().ChatLoad = true
+
 
 
 
