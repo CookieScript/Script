@@ -1,7 +1,6 @@
 
 
 
-
 --[[
 
 
@@ -820,35 +819,47 @@ hookfunction(game.Players.LocalPlayer.IsInGroup, function() return true end)
 --[[
 
 
-local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-    local split = string.split(pingvalue,'(')
-    local ping = tonumber(split[1])
-    if ping < 200 then
-        
-    elseif ping < 185 then
-        
-    elseif ping < 168 then
-        
-    elseif ping < 145 then
-        
-    elseif ping < 125 then
-        
-    elseif ping < 110 then
-        
-    elseif ping < 105 then
-        
-    elseif ping < 90 then
-        
-    elseif ping < 80 then
-        
-    elseif ping < 70 then
-        
-    elseif ping < 60 then
-        
-    elseif ping < 50 then
-        
-    elseif ping < 40 then
-        
+local function updatePredictionValue()
+    if getgenv().extort.AutoPrediction then
+        local pingValue = Stas.Network.ServerStatsItem["Data Ping"]:GetValueString()
+        local split = string.split(pingValue, '(')
+        local ping = tonumber(split[1])
+
+        if ping then
+            if getgenv().extort.AutoPredMode == "PingBased" then
+                for i = 1, #predictionTable do
+                    if ping < predictionTable[i][1] then
+                        local value = predictionTable[i][2]
+                        getgenv().extort.HorizontalPrediction = value
+                        getgenv().extort.VerticalPrediction = value
+                        break
+                    end
+                end
+            elseif getgenv().extort.AutoPredMode == "Calculation" then
+                local calculatedValue = 0.1 + (ping / 1000) * 0.32
+                getgenv().extort.HorizontalPrediction = calculatedValue
+                getgenv().extort.VerticalPrediction = calculatedValue
+            elseif getgenv().extort.AutoPredMode == "AdvanceCalculation" then
+                for i = 1, #predictionTable do
+                    if ping < predictionTable[i][1] then
+                        local pingBase = predictionTable[i][2]
+                        local advancePredictionValue = calculateAdvancePrediction(Plr, workspace.CurrentCamera.CFrame.Position, pingBase)
+                        getgenv().extort.HorizontalPrediction = advancePredictionValue
+                        getgenv().extort.VerticalPrediction = advancePredictionValue
+                        break
+                    end
+                end
+            elseif getgenv().extort.AutoPredMode == "Blatant" then
+                for i = 1, #Blatant do
+                    if ping < Blatant[i][1] then
+                        local value = Blatant[i][2]
+                        getgenv().extort.HorizontalPrediction = value
+                        getgenv().extort.VerticalPrediction = value
+                        break
+                    end
+                end
+            end
+        end
     end
 end
 
@@ -1128,7 +1139,6 @@ aimbot:AddDropdown('predcal', {
         
     end
 })
-
 
 aimbot:AddDivider()
 aimbot:AddToggle('Camlocktoggle', {
