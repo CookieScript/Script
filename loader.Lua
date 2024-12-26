@@ -1129,19 +1129,6 @@ aimbot:AddDropdown('predcal', {
     end
 })
 
-aimbot:AddSlider('predcall', {
-    Text = 'Auto Pred Calculate',
-    Default = 255,
-    Min = 0,
-    Max = 1000,
-    Rounding = 1,
-    Compact = false,
-
-    Callback = function(jairok)
-        
-    end
-})
-
 
 aimbot:AddDivider()
 aimbot:AddToggle('Camlocktoggle', {
