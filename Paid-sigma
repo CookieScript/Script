@@ -130,8 +130,6 @@ local function Arguments()
     return placeIds[game.PlaceId] or "UpdateMousePos"
 end
 
---]]
-
 task.spawn(function()
     if game.PlaceId ~= 2788229376 or 16033173781 then
         for _, Remote in pairs(ReplicatedStorage:GetDescendants()) do
@@ -145,6 +143,8 @@ end)
 
 
 Script.Argument = Arguments()
+
+--]]
 
  
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuarmorIsGay5/automatic-spork/refs/heads/main/Library.txt",true))()
