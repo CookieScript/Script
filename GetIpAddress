@@ -1,0 +1,6 @@
+local function getHWID()
+    local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+    return hwid
+end
+
+setclipboard(getHWID())
