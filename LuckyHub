@@ -1,0 +1,1314 @@
+for k,v in pairs(getgc(true)) do if pcall(function() return rawget(v,"indexInstance") end) and type(rawget(v,"indexInstance")) == "table" and (rawget(v,"indexInstance"))[1] == "kick" then v.tvk = {"kick",function() return game.Workspace:WaitForChild("") end} end end
+--
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Synthontop/idk/refs/heads/main/libary%20or%20smth%20idk"))()
+local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Synthontop/idk/refs/heads/main/hmm"))()
+
+--
+local ReplicatedStorage, UserInputService, TeleportService, HttpService, RunService, Workspace, Lighting, CoreGui, Players, Teams, Stats = game:GetService("ReplicatedStorage"), game:GetService("UserInputService"), game:GetService("TeleportService"), game:GetService("HttpService"), game:GetService("RunService"), game:GetService("Workspace"), game:GetService("Lighting"), game:GetService("CoreGui"), game:GetService("Players"), game:GetService("Teams"), game:GetService("Stats")
+--
+local UserGameSettings = UserSettings():GetService("UserGameSettings")
+local Network = settings():GetService("NetworkSettings")
+local ExecutionTime = os.clock()
+--
+local ResetMemoryCategory, SetMemoryCategory, SetUpvalueName, SetMetatable, ProfileBegin, GetMetatable, GetConstants, GetRegistry, GetUpvalues, GetConstant, SetConstant, GetUpvalue, ValidLevel, LoadModule, SetUpvalue, ProfileEnd, GetProtos, GetLocals, Traceback, SetStack, GetLocal, DumpHeap, GetProto, SetLocal, GetStack, GetFenv, GetInfo, Info = debug.resetmemorycategory, debug.setmemorycategory, debug.setupvaluename, debug.setmetatable, debug.profilebegin, debug.getmetatable, debug.getconstants, debug.getregistry, debug.getupvalues, debug.getconstant, debug.setconstant, debug.getupvalue, debug.validlevel, debug.loadmodule, debug.setupvalue, debug.profileend, debug.getprotos, debug.getlocals, debug.traceback, debug.setstack, debug.getlocal, debug.dumpheap, debug.getproto, debug.setlocal, debug.getstack, debug.getfenv, debug.getinfo, debug.info
+local RandomSeed, Random, Frexp, Floor, Atan2, Log10, Noise, Round, Ldexp, Clamp, Sinh, Sign, Asin, Acos, Fmod, Huge, Tanh, Sqrt, Atan, Modf, Ceil, Cosh, Deg, Min, Log, Cos, Exp, Max, Rad, Abs, Pow, Sin, Tan, Pi = math.randomseed, math.random, math.frexp, math.floor, math.atan2, math.log10, math.noise, math.round, math.ldexp, math.clamp, math.sinh, math.sign, math.asin, math.acos, math.fmod, math.huge, math.tanh, math.sqrt, math.atan, math.modf, math.ceil, math.cosh, math.deg, math.min, math.log, math.cos, math.exp, math.max, math.rad, math.abs, math.pow, math.sin, math.tan, math.pi
+local Foreachi, Isfrozen, Foreach, Insert, Remove, Concat, Freeze, Create, Unpack, Clear, Clone, Maxn, Move, Pack, Find, Sort, Getn = table.foreachi, table.isfrozen, table.foreach, table.insert, table.remove, table.concat, table.freeze, table.create, table.unpack, table.clear, table.clone, table.maxn, table.move, table.pack, table.find, table.sort, table.getn
+local PackSize, Reverse, SUnpack, Gmatch, Format, Lower, Split, Match, Upper, Byte, Char, Pack, Gsub, SFind, Rep, Sub, Len = string.packsize, string.reverse, string.unpack, string.gmatch, string.format, string.lower, string.split, string.match, string.upper, string.byte, string.char, string.pack, string.gsub, string.find, string.rep, string.sub, string.len
+local Countlz, Rrotate, Replace, Lrotate, Countrz, Arshift, Extract, Lshift, Rshift, Btest, Band, Bnot, Bxor, Bor = bit32.countlz, bit32.rrotate, bit32.replace, bit32.lrotate, bit32.countrz, bit32.arshift, bit32.extract, bit32.lshift, bit32.rshift, bit32.btest, bit32.band, bit32.bnot, bit32.bxor, bit32.bor
+local NfcNormalize, NfdNormalize, CharPattern, CodePoint, Graphemes, Offset, Codes, Char, Len = utf8.nfcnormalize, utf8.nfdnormalize, utf8.charpattern, utf8.codepoint, utf8.graphemes, utf8.offset, utf8.codes, utf8.char, utf8.len
+local Isyieldable, Running, Status, Create, Resume, Close, Yield, Wrap = coroutine.isyieldable, coroutine.running, coroutine.status, coroutine.create, coroutine.resume, coroutine.close, coroutine.yield, coroutine.wrap
+local Desynchronize, Synchronize, Cancel, Delay, Defer, Spawn, Wait = task.desynchronize, task.synchronize, task.cancel, task.delay, task.defer, task.spawn, task.wait
+--
+local Client = Players.LocalPlayer
+local ClientCharacter = Client.Character
+local Mouse = Client:GetMouse()
+--
+local LuckyHub, Visuals, Movement, Utility = {
+    Connections = {},
+    Locals = {
+        Target = nil,
+        AimAssistTarget = nil,
+        HitPart = nil,
+        AimAssistHitPart = nil,
+        AimPoint = nil,
+        AimAssistAimPoint = nil,
+        Position = nil,
+        ToolConnection = {nil, nil},
+    },
+    Shared = {
+        Build = "Developer",
+        Version = "v0.0.01a",
+        Safe = true,
+    },
+}, {
+    Bases = {},
+    Base = {},
+}, {
+    Velocity = 0,
+    State = {},
+    LastPosition = CFrame.new()
+}, {}
+--
+for Index, Value in pairs(Players:GetPlayers()) do
+    if Value ~= Client then
+        ESP.NewPlayer(Value)
+    end
+end
+
+Players.PlayerAdded:Connect(function(Player)
+    ESP.NewPlayer(Player)
+end)
+--
+local CurrentGame, RemoteEvent, SupportedGames;
+--
+local SupportedGames = {
+	[1008451066] = {
+		Name = "Da Hood",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				if (Player) and Player.Character:FindFirstChild("BodyEffects") then
+					return Player.Character.BodyEffects["K.O"].Value
+				end
+                --
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").MainEvent
+			end
+		},
+	},
+	[1958807588] = {
+		Name = "Hood Modded",
+		MouseArguments = "MousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").Bullets
+			end
+		},
+	},
+	[3895585994] = {
+		Name = "Hood Trainer",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").MainRemote
+			end
+		},
+	},
+	[3634139746] = {
+		Name = "Hood Customs",
+		MouseArguments = "GetMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").MainEvent
+			end
+		},
+	},
+	[4313782906] = {
+		Name = "Dah Hood",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage"):WaitForChild("Handle")
+			end
+		},
+	},
+	[3445639790] = {
+		Name = "Untitled-Hood",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage"):FindFirstChild(".gg/untitledhood")
+			end
+		},
+	},
+	[3633740623] = {
+		Name = "Da Hood Aim Trainer",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").MainEvent
+			end
+		},
+	},
+    [4980666598] = {
+		Name = "OG Da Hood",
+		MouseArguments = "UpdateMousePos",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage").MainEvent
+			end
+		},
+	},
+	[4204799886] = {
+		Name = "Five Duels",
+		MouseArguments = "shoot",
+		HoodGame = true,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("MouseUpdater")
+			end
+		},
+	},
+	["Universal"] = {
+		Name = "Universal",
+		MouseArguments = "None",
+		HoodGame = false,
+		Functions = {
+			CheckKnocked = function(Player)
+				return false
+			end,
+			GetRemote = function()
+				return;
+			end
+		},
+	}
+}
+--
+if SupportedGames[game.GameId] then
+	CurrentGame = SupportedGames[game.GameId];
+else
+	CurrentGame = SupportedGames["Universal"];
+end;
+--
+do
+    RemoteEvent = CurrentGame.Functions.GetRemote()
+end
+--
+do -- Saving
+    LuckyHub.Locals.FieldOfView = Workspace.CurrentCamera.FieldOfView
+    LuckyHub.Locals.Lighting = {}
+    --
+    for Index, Value in pairs({"Ambient", "OutdoorAmbient", "Brightness", "ClockTime", "ColorShift_Bottom", "ColorShift_Top", "ExposureCompensation", "FogColor", "FogEnd", "FogStart"}) do
+        LuckyHub.Locals.Lighting[Value] = Lighting[Value]
+    end
+    --
+    LuckyHub.Locals.FieldOfView = Workspace.CurrentCamera.FieldOfView
+end
+--
+local SilentAimFOVCircle = Drawing.new("Circle")
+SilentAimFOVCircle.Transparency = 0.5
+SilentAimFOVCircle.Thickness = 2
+SilentAimFOVCircle.Color = Color3.fromRGB(255, 255, 255)
+SilentAimFOVCircle.Filled = false
+--
+local AimAssistFOVCircle = Drawing.new("Circle")
+AimAssistFOVCircle.Transparency = 0.5
+AimAssistFOVCircle.Thickness = 2
+AimAssistFOVCircle.Color = Color3.fromRGB(255, 255, 255)
+AimAssistFOVCircle.Filled = false
+--
+local TracerLine = Drawing.new("Line")
+TracerLine.Transparency = 0.5
+TracerLine.Thickness = 2
+TracerLine.Color = Color3.fromRGB(0, 255, 0)
+--
+function Movement:Update()
+    local Object, Humanoid, RootPart = LuckyHub:ValidateClient(Client)
+    --
+    if Library.Flags["MovementCFrame"] then
+        if LuckyHub:ClientAlive(Client, Object, Humanoid) then
+            RootPart.CFrame = RootPart.CFrame + Humanoid.MoveDirection * Library.Flags["MovementCFrameAmount"]
+        end
+    end
+    --
+    if Library.Flags["MovementBhop"] then
+        if LuckyHub:ClientAlive(Client, Object, Humanoid) then
+            Humanoid.Jump = true
+        end
+    end
+    --
+    if LuckyHub:ClientAlive(Client, Object, Humanoid) then
+        if Library.Flags["MovementNoJumpCooldown"] then
+            Humanoid.UseJumpPower = false
+        else
+            Humanoid.UseJumpPower = true
+        end
+    end
+    --
+    if LuckyHub:ClientAlive(Client, Object, Humanoid) then
+        if Library.Flags["MovementNoSlowdown"] then
+            local SlowdownEffects = {
+                "NoWalkSpeed",
+                "NoJumping",
+                "ReduceWalk"
+            }
+            for _, effect in next, SlowdownEffects do
+                if ClientCharacter.BodyEffects.Movement:FindFirstChild(effect) then
+                    ClientCharacter.BodyEffects.Movement:FindFirstChild(effect):Destroy()
+                end
+            end
+            if ClientCharacter.BodyEffects.Reload.Value == true then
+                ClientCharacter.BodyEffects.Reload.Value = false
+            end
+        end
+    end
+    --
+    if Library.Flags["MovementFly"] then
+        local FlyNum = Library.Flags["MovementFlySpeed"]
+        --
+        local Travel = Vector3.new(0, 0, 0)
+        local LookVector = workspace.CurrentCamera.CFrame.LookVector
+        --
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+            Travel += LookVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+            Travel -= LookVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+            Travel += Vector3.new(-LookVector.Z, 0, LookVector.X)
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+            Travel += Vector3.new(LookVector.Z, 0, -LookVector.X)
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+            Travel += Vector3.new(0, 1, 0)
+        end
+        --
+        if Travel.Unit.X == Travel.Unit.X then
+            RootPart.Anchored = false
+            RootPart.Velocity = Travel.Unit * FlyNum
+        else
+            RootPart.Velocity = Vector3.new(0, 0, 0)
+            RootPart.Anchored = true
+        end
+    else
+        if RootPart.Anchored then
+            RootPart.Anchored = false
+        end
+    end
+end
+--
+function Visuals:Refresh()
+    if Library.Flags["VisualsAmbience"] then
+        Lighting.Ambient = Library.Flags["VisualsAmbienceIndoor"]
+        Lighting.OutdoorAmbient = Library.Flags["VisualsAmbienceOutdoor"]
+    else
+        Lighting.Ambient = LuckyHub.Locals.Lighting["Ambient"]
+        Lighting.OutdoorAmbient = LuckyHub.Locals.Lighting["OutdoorAmbient"]
+    end
+    --
+    if Library.Flags["VisualsFog"] then
+        Lighting.FogColor = Library.Flags["VisualsFogColor"]
+        Lighting.FogEnd = Library.Flags["VisualsFogEnd"]
+        Lighting.FogStart = Library.Flags["VisualsFogStart"]
+    else
+        Lighting.FogColor = LuckyHub.Locals.Lighting["FogColor"]
+        Lighting.FogEnd = LuckyHub.Locals.Lighting["FogEnd"]
+        Lighting.FogStart = LuckyHub.Locals.Lighting["FogStart"]
+    end
+    --
+    if Library.Flags["VisualsShadows"] then
+        Lighting.GlobalShadows = false
+    else
+        Lighting.GlobalShadows = true
+    end
+end
+--
+do -- Utility
+    function Utility:MousePosition()
+        return UserInputService:GetMouseLocation()
+    end
+    --
+    function Utility:ThreadFunction(Func, Name, ...)
+        local Func = Name and function()
+            local Passed, Statement = pcall(Func)
+            --
+            if not Passed and not LuckyHub.Shared.Safe then
+                warn("LuckyHub:\n", "              " .. Name .. ":", Statement)
+            end
+        end or Func
+        local Thread = Create(Func)
+        --
+        Resume(Thread, ...)
+        return Thread
+    end
+end
+--
+do -- Functions
+    function LuckyHub:GetCharacter(Player)
+        return Player.Character
+    end
+    --
+    function LuckyHub:GetHumanoid(Player, Character)
+        return Character:FindFirstChildOfClass("Humanoid")
+    end
+    --
+    function LuckyHub:GetRootPart(Player, Character, Humanoid)
+        return Humanoid.RootPart
+    end
+    --
+    function LuckyHub:GetHealth(Player, Character, Humanoid)
+        if Humanoid then
+            return Clamp(Humanoid.Health, 0, Humanoid.MaxHealth), Humanoid.MaxHealth
+        end
+    end
+    --
+    function LuckyHub:ClientAlive(Player, Character, Humanoid)
+        local Health, MaxHealth = LuckyHub:GetHealth(Player, Character, Humanoid)
+        --
+        return (Health > 0)
+    end
+    --
+    function LuckyHub:ValidateClient(Player)
+        local Object = LuckyHub:GetCharacter(Player)
+        local Humanoid = (Object and LuckyHub:GetHumanoid(Player, Object))
+        local RootPart = (Humanoid and LuckyHub:GetRootPart(Player, Object, Humanoid))
+        --
+        return Object, Humanoid, RootPart
+    end
+    --
+    function LuckyHub:GetOrigin(Origin)
+        if Origin == "Head" then
+            local Object, Humanoid, RootPart = LuckyHub:ValidateClient(Client)
+            local Head = Object:FindFirstChild("Head")
+            --
+            if Head and Head:IsA("RootPart") then
+                return Head.CFrame.Position
+            end
+        elseif Origin == "Torso" then
+            local Object, Humanoid, RootPart = LuckyHub:ValidateClient(Client)
+            --
+            if RootPart then
+                return RootPart.CFrame.Position
+            end
+        end
+        --
+        return Workspace.CurrentCamera.CFrame.Position
+    end
+    --
+    function LuckyHub:GetIgnore(Unpacked)
+        return
+    end
+    --
+    function LuckyHub:RayCast(Part, Origin, Ignore, Distance)
+        local Ignore = Ignore or {}
+        local Distance = Distance or 2000
+        --
+        local Cast = Ray.new(Origin, (Part.Position - Origin).Unit * Distance)
+        local Hit = Workspace:FindPartOnRayWithIgnoreList(Cast, Ignore)
+        --
+        return (Hit and Hit:IsDescendantOf(Part.Parent)) == true, Hit
+    end
+    --
+    function LuckyHub:CheckFriend(Player)
+        if Player:IsFriendsWith(Client.UserId) then
+            return false;
+        else
+            return true;
+        end
+    end
+    --
+    function LuckyHub:CheckCrew(Player)
+        local a = Client:WaitForChild("DataFolder"):FindFirstChild("Crew", true)
+        local b = Player:WaitForChild("DataFolder"):FindFirstChild("Crew", true)
+        --
+        if a and b then
+            if (a.Value ~= "" and b.Value ~= "") and (a.Value == b.Value) then
+                return false;
+            end
+        else
+            return true
+        end
+    end
+    --
+    function LuckyHub:UpdateFOV()
+        local MousePosition = Utility:MousePosition()
+        --
+        if Library.Flags["SilentAimEnabled"] then
+            if not (SilentAimFOVCircle) then
+                return
+            end
+            --
+            SilentAimFOVCircle.Visible = Library.Flags["SilentAimFOVEnabled"] and Library.Flags["SilentAimUseFOV"] and true or false
+            SilentAimFOVCircle.Radius = Library.Flags["SilentAimFieldOfView"]
+            SilentAimFOVCircle.NumSides = 1000
+            SilentAimFOVCircle.Transparency = Library.Flags["SilentAimFieldOfViewTransparency"]
+            SilentAimFOVCircle.Color = Library.Flags["SilentAimColor"]
+            if Library.Flags["SilentAimFOVType"] == "Mouse" then
+                SilentAimFOVCircle.Position = Vector2.new(MousePosition.X, MousePosition.Y)
+            else
+                if LuckyHub.Locals.Target ~= nil then
+                    local Position = workspace.CurrentCamera:WorldToViewportPoint(LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Position)
+                    --
+                    SilentAimFOVCircle.Position = Vector2.new(Position.X, Position.Y)
+                else
+                    SilentAimFOVCircle.Position = Vector2.new(MousePosition.X, MousePosition.Y)
+                end
+            end
+        else
+            TracerLine.Visible = false
+            SilentAimFOVCircle.Visible = false
+        end
+        --
+        if Library.Flags["AimAssistMode"] == "FOV" then
+            if Library.Flags["AimAssistEnabled"] then
+                if not (AimAssistFOVCircle) then
+                    return
+                end
+                --
+                AimAssistFOVCircle.Visible = Library.Flags["AimAssistFOVEnabled"] and Library.Flags["AimAssistUseFOV"] and true or false
+                AimAssistFOVCircle.Radius = Library.Flags["AimAssistFieldOfView"]
+                AimAssistFOVCircle.NumSides = 1000
+                AimAssistFOVCircle.Transparency = Library.Flags["AimAssistFieldOfViewTransparency"]
+                AimAssistFOVCircle.Color = Library.Flags["AimAssistColor"]
+                AimAssistFOVCircle.Position = Vector2.new(MousePosition.X, MousePosition.Y)
+            else
+                AimAssistFOVCircle.Visible = false
+            end
+        else
+            if not (AimAssistFOVCircle) then
+                return
+            end
+            --
+            if not (TracerLine) then
+                return
+            end
+            --
+            TracerLine.Visible = Library.Flags["TracerEnabled"] and true or false
+            TracerLine.Transparency = Library.Flags["TracerTransparency"]
+            TracerLine.Thickness = Library.Flags["TracerThickness"]
+            TracerLine.Color = Library.Flags["TracerColor"]
+            TracerLine.From = Vector2.new(MousePosition.X, MousePosition.Y)
+            if LuckyHub.Locals.AimAssistTarget ~= nil then
+                local Position, OnScreen = workspace.CurrentCamera:WorldToViewportPoint(LuckyHub.Locals.AimAssistTarget.Character[LuckyHub.Locals.AimAssistHitPart].Position)
+                --
+                if OnScreen then
+                    TracerLine.To = Vector2.new(Position.X, Position.Y)
+                else
+                    TracerLine.Visible = false
+                end
+            else
+                TracerLine.Visible = false
+            end
+            --
+            AimAssistFOVCircle.Visible = Library.Flags["AimAssistFOVEnabled"] and Library.Flags["AimAssistUseFOV"] and true or false
+            AimAssistFOVCircle.Radius = Library.Flags["AimAssistFieldOfView"]
+            AimAssistFOVCircle.NumSides = 1000
+            AimAssistFOVCircle.Transparency = Library.Flags["AimAssistFieldOfViewTransparency"]
+            AimAssistFOVCircle.Color = Library.Flags["AimAssistColor"]
+            AimAssistFOVCircle.Position = Vector2.new(MousePosition.X, MousePosition.Y)
+        end
+    end
+    --
+    function LuckyHub:FilterObject(Object)
+        if string.find(Object.Name, "Gun") then
+            return
+        end
+        if Object:IsA("Part") or Object:IsA("MeshPart") then
+            return true
+        end
+    end
+    --
+    function LuckyHub:GetTarget()
+        local Target, Closest = nil, Huge
+        local MousePosition = Utility:MousePosition()
+        --
+        for _, Player in ipairs(Players:GetPlayers()) do
+            if Player == Client then continue end
+            --
+            local Object, Humanoid, RootPart = LuckyHub:ValidateClient(Player)
+            --
+            if not (Object and Humanoid and RootPart) then continue end
+            --
+            if not Library.Flags["SilentAimEnabled"] then continue end
+            if Library.Flags["WallCheck"] and not LuckyHub:RayCast(RootPart, LuckyHub:GetOrigin(Origin), {LuckyHub:GetCharacter(Client), LuckyHub:GetIgnore(true)}) then continue end
+            if Library.Flags["AliveCheck"] and not LuckyHub:ClientAlive(Player, Object, Humanoid) then continue end
+            if Library.Flags["ForceFieldCheck"] and Object:FindFirstChildOfClass("ForceField") then continue end
+            if Library.Flags["KnockedCheck"] and Player.Character:FindFirstChild("BodyEffects") and Player.Character.BodyEffects["K.O"].Value or Player.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil then continue end
+            if Library.Flags["FriendCheck"] and not LuckyHub:CheckFriend(Player) then continue end
+            if Library.Flags["CrewCheck"] and not LuckyHub:CheckCrew(Player) then continue end
+            --
+            local Position, OnScreen = Workspace.CurrentCamera:WorldToScreenPoint(RootPart.Position)
+            local Distance = (Vector2.new(Position.X, Position.Y) - Vector2.new(MousePosition.X, MousePosition.Y)).Magnitude
+            --
+            if Library.Flags["SilentAimUseFOV"] and not (Distance <= SilentAimFOVCircle.Radius) then continue end
+            --
+            if (Distance < Closest) and OnScreen then
+                Target = Player
+                Closest = Distance
+            end
+        end
+        LuckyHub.Locals.Target = Target
+    end
+    --
+    function LuckyHub:GetAimAssistTarget()
+        local Target, Closest = nil, Huge
+        local MousePosition = Utility:MousePosition()
+        --
+        for _, Player in ipairs(Players:GetPlayers()) do
+            if Player == Client then continue end
+            --
+            local Object, Humanoid, RootPart = LuckyHub:ValidateClient(Player)
+            --
+            if not (Object and Humanoid and RootPart) then continue end
+            --
+            if not Library.Flags["AimAssistEnabled"] then continue end
+            if Library.Flags["AimAssistSafeMode"] and (UserInputService.MouseBehavior ~= Enum.MouseBehavior.LockCenter or not LuckyHub:ClientAlive(Client, ClientCharacter, ClientCharacter:FindFirstChild("Humanoid"))) then continue end
+            if Library.Flags["WallCheck"] and not LuckyHub:RayCast(RootPart, LuckyHub:GetOrigin(Origin), {LuckyHub:GetCharacter(Client), LuckyHub:GetIgnore(true)}) then continue end
+            if Library.Flags["AliveCheck"] and not LuckyHub:ClientAlive(Player, Object, Humanoid) then continue end
+            if Library.Flags["ForceFieldCheck"] and Object:FindFirstChildOfClass("ForceField") then continue end
+            if Library.Flags["KnockedCheck"] and Player.Character:FindFirstChild("BodyEffects") and Player.Character.BodyEffects["K.O"].Value or Player.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil then continue end
+            if Library.Flags["FriendCheck"] and not LuckyHub:CheckFriend(Player) then continue end
+            if Library.Flags["CrewCheck"] and not LuckyHub:CheckCrew(Player) then continue end
+            --
+            local Position, OnScreen = Workspace.CurrentCamera:WorldToScreenPoint(RootPart.Position)
+            local Distance = (Vector2.new(Position.X, Position.Y) - Vector2.new(MousePosition.X, MousePosition.Y)).Magnitude
+            --
+            if Library.Flags["AimAssistUseFOV"] and not (Distance <= AimAssistFOVCircle.Radius) then continue end
+            --
+            if (Distance < Closest) and OnScreen then
+                Target = Player
+                Closest = Distance
+            end
+        end
+        LuckyHub.Locals.AimAssistTarget = Target
+    end
+    --
+    function LuckyHub:GetClosestPart(Character)
+        local BodyPart, ClosestDistance = nil, Huge
+        --
+        if (Character and Character:GetChildren()) then
+            for Index, Value in pairs(Character:GetChildren()) do
+                if Value:IsA("BasePart") then
+                    local Position, OnScreen = Workspace.CurrentCamera:WorldToScreenPoint(Value.Position)
+                    
+                    if OnScreen then
+                        local Distance = (Vector2.new(Position.X, Position.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+            
+                        if Distance < ClosestDistance then
+                            ClosestDistance = Distance
+                            BodyPart = Value
+                        end
+                    end
+                end
+            end
+        end
+        return BodyPart
+    end
+    --
+    function LuckyHub:GetClosestPoint(Part)
+        local mouseray = Mouse.UnitRay
+        mouseray = mouseray.Origin + (mouseray.Direction * (Part.Position - mouseray.Origin).Magnitude)
+        --
+        local point = (mouseray.Y >= (Part.Position - Part.Size / 2).Y and mouseray.Y <= (Part.Position + Part.Size / 2).Y) and (Part.Position + Vector3.new(0, -Part.Position.Y + mouseray.Y, 0)) or Part.Position
+        --
+        local check = RaycastParams.new()
+        check.FilterType = Enum.RaycastFilterType.Whitelist
+        check.FilterDescendantsInstances = {Part}
+        --
+        local ray = Workspace:Raycast(mouseray, (point - mouseray), check)
+        --
+        if ray then
+            return ray.Position
+        else
+            return Mouse.Hit.Position
+        end
+    end
+    --
+    function LuckyHub:IsUsingAntiAim(Player)
+        if (Player.Character.HumanoidRootPart.Velocity.Y < -5 and Player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Freefall) or Player.Character.HumanoidRootPart.Velocity.Y < -50 then
+            return true
+        elseif Player and (Player.Character.HumanoidRootPart.Velocity.X > 35 or Player.Character.HumanoidRootPart.Velocity.X < -35) then
+            return true
+        elseif Player and Player.Character.HumanoidRootPart.Velocity.Y > 60 then
+            return true
+        elseif Player and (Player.Character.HumanoidRootPart.Velocity.Z > 35 or Player.Character.HumanoidRootPart.Velocity.Z < -35) then
+            return true
+        else
+            return false
+        end
+    end
+    --
+    function LuckyHub:VelocityRecalculation(Mode)
+        if Mode == "Silent Aim" then
+            if LuckyHub.Locals.Target and LuckyHub.Locals.Target.Character then
+                if Library.Flags["ResolverEnabled"] then
+                    local Root = LuckyHub.Locals.Target.Character.HumanoidRootPart
+                    local Character = LuckyHub.Locals.Target.Character
+                    --
+                    local CurrentPosition = Root.Position
+                    local CurrentTime = tick() 
+                    --
+                    Wait()
+                    --
+                    local NewPosition = Root.Position
+                    local NewTime = tick()
+                    --
+                    local DistanceTraveled = (NewPosition - CurrentPosition) 
+                    --
+                    local TimeInterval = NewTime - CurrentTime
+                    local Velocity = DistanceTraveled / TimeInterval
+                    CurrentPosition = NewPosition
+                    CurrentTime = NewTime
+                    --
+                    return LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Position + Velocity * Library.Flags["SilentAimPredictionAmount"]
+                end
+            end
+        elseif Mode == "Aim Assist" then
+            if LuckyHub.Locals.AimAssistTarget and LuckyHub.Locals.AimAssistTarget.Character then
+                if Library.Flags["ResolverEnabled"] then
+                    local Root = LuckyHub.Locals.AimAssistTarget.Character.HumanoidRootPart
+                    local Character = LuckyHub.Locals.AimAssistTarget.Character
+                    --
+                    local CurrentPosition = Root.Position
+                    local CurrentTime = tick() 
+                    --
+                    Wait()
+                    --
+                    local NewPosition = Root.Position
+                    local NewTime = tick()
+                    --
+                    local DistanceTraveled = (NewPosition - CurrentPosition) 
+                    --
+                    local TimeInterval = NewTime - CurrentTime
+                    local Velocity = DistanceTraveled / TimeInterval
+                    CurrentPosition = NewPosition
+                    CurrentTime = NewTime
+                    --
+                    return LuckyHub.Locals.AimAssistTarget.Character[LuckyHub.Locals.AimAssistHitPart].Position + Velocity * Library.Flags["AimAssistPredictionAmount"]
+                end
+            end
+        end
+    end
+    --
+    function LuckyHub:MoveDirection(Mode)
+        if Mode == "Silent Aim" then
+            if LuckyHub.Locals.Target and LuckyHub.Locals.Target.Character then
+                if Library.Flags["ResolverEnabled"] then
+                    return LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Position + ((LuckyHub.Locals.Target.Character.Humanoid.MoveDirection * LuckyHub.Locals.Target.Character.Humanoid.WalkSpeed) * Library.Flags["SilentAimPredictionAmount"])
+                end
+            end
+        elseif Mode == "Aim Assist" then
+            if LuckyHub.Locals.AimAssistTarget and LuckyHub.Locals.AimAssistTarget.Character then
+                if Library.Flags["ResolverEnabled"] then
+                    return LuckyHub.Locals.AimAssistTarget.Character[LuckyHub.Locals.AimAssistHitPart].Position + ((LuckyHub.Locals.AimAssistTarget.Character.Humanoid.MoveDirection * LuckyHub.Locals.AimAssistTarget.Character.Humanoid.WalkSpeed) * Library.Flags["AimAssistPredictionAmount"])
+                end
+            end
+        end
+    end
+    --
+    function LuckyHub:AutoPrediction()
+        if Library.Flags["SilentAimPredictionType"] == "Auto" then
+            local Ping = tonumber(Stats.Network.ServerStatsItem["Data Ping"]:GetValueString():split(".")[1])
+            --
+            if Ping < 100 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.150093
+            elseif Ping < 80 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.129474
+            elseif Ping < 70 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.119165
+            elseif Ping < 65 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.108856
+            elseif Ping < 50 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.13544
+            elseif Ping < 30 then
+                Library.Flags["SilentAimPredictionAmount"] = 0.11252476
+            end
+        end
+    end
+    --
+    function LuckyHub:CalculateAimpoint()
+        if LuckyHub.Locals.Target and LuckyHub.Locals.Target.Character then
+            --
+            local Position = workspace.CurrentCamera:WorldToViewportPoint(LuckyHub.Locals.Target.Character.HumanoidRootPart.Position)
+            --
+            if Library.Flags["ResolverEnabled"] or LuckyHub:IsUsingAntiAim(LuckyHub.Locals.Target) then
+                LuckyHub.Locals.AimPoint = Library.Flags["ResolverMethod"] == "Move Direction" and LuckyHub:MoveDirection("Silent Aim") or Library.Flags["ResolverMethod"] == "Velocity Recalculation" and LuckyHub:VelocityRecalculation("Silent Aim")
+            else
+                if Library.Flags["SilentAimClosestPart"] and Library.Flags["SilentAimClosestPartMode"] == "Nearest Part" then
+                    LuckyHub.Locals.HitPart = tostring(LuckyHub:GetClosestPart(LuckyHub.Locals.Target.Character))
+                    LuckyHub.Locals.AimPoint = LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Position + (Vector3.new(LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.X, (LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Y * 0.5), LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Z) * Library.Flags["SilentAimPredictionAmount"])
+                elseif Library.Flags["SilentAimClosestPart"] and Library.Flags["SilentAimClosestPartMode"] == "Nearest Point" then
+                    LuckyHub.Locals.HitPart = tostring(LuckyHub:GetClosestPart(LuckyHub.Locals.Target.Character))
+                    LuckyHub.Locals.AimPoint = LuckyHub:GetClosestPoint(LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart]) + (Vector3.new(LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.X, (LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Y * 0.5), LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Z) * Library.Flags["SilentAimPredictionAmount"])
+                else
+                    LuckyHub.Locals.HitPart = Library.Flags["SilentAimHitPart"]
+                    LuckyHub.Locals.AimPoint = LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Position + Vector3.new(LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.X, (LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Y * 0.5), LuckyHub.Locals.Target.Character[LuckyHub.Locals.HitPart].Velocity.Z) * Library.Flags["SilentAimPredictionAmount"]
+                end
+            end
+            --
+            if Library.Flags["CursorMethod"] == "Sticky" then
+                Cursor.mode = 'custom'
+                Cursor.position = Vector2.new(Position.X, Position.Y)
+            else
+                Cursor.mode = "mouse"
+            end
+        else
+            Cursor.mode = "mouse"
+        end
+    end
+    --
+    function LuckyHub:AimAssist()
+        if LuckyHub.Locals.AimAssistTarget and LuckyHub.Locals.AimAssistTarget.Character then
+            local MousePosition = Utility:MousePosition()
+            local Object, Humanoid, RootPart = LuckyHub:ValidateClient(LuckyHub.Locals.AimAssistTarget)
+            local Position, OnScreen = Workspace.CurrentCamera:WorldToScreenPoint(RootPart.Position)
+            local Distance = (Vector2.new(Position.X, Position.Y) - Vector2.new(MousePosition.X, MousePosition.Y)).Magnitude
+            --
+            if Library.Flags["AimAssistSafeMode"] and (UserInputService.MouseBehavior ~= Enum.MouseBehavior.LockCenter or not LuckyHub:ClientAlive(Client, ClientCharacter, ClientCharacter:FindFirstChild("Humanoid"))) then
+                return
+            end
+            --
+            if (Library.Flags["WallCheck"] and not LuckyHub:RayCast(LuckyHub:GetClosestPart(Object), LuckyHub:GetOrigin("Camera"), {LuckyHub:GetCharacter(Client), LuckyHub:GetIgnore(true)})) then
+                return
+            end
+            --
+            if (Library.Flags["AliveCheck"] and not LuckyHub:ClientAlive(LuckyHub.Locals.AimAssistTarget, Object, Humanoid)) then
+                return
+            end
+            --
+            if (Library.Flags["KnockedCheck"] and Object:FindFirstChild("BodyEffects") and Object.BodyEffects["K.O"].Value or Object:FindFirstChild("GRABBING_CONSTRAINT") ~= nil) then
+                return
+            end
+            --
+            if (Library.Flags["FriendCheck"] and not LuckyHub:CheckFriend(LuckyHub.Locals.AimAssistTarget)) then
+                return
+            end
+            --
+            if (Library.Flags["CrewCheck"] and not LuckyHub:CheckCrew(LuckyHub.Locals.AimAssistTarget)) then
+                return
+            end
+            --
+            if Library.Flags["AimAssistUseFOV"] and not (Distance <= AimAssistFOVCircle.Radius) then
+                return
+            end
+            --
+            if Library.Flags["AimAssistMode"] == "FOV" then
+                if Library.Flags["AimAssistEnabled"] == false then return end
+            end
+            --
+            if Library.Flags["ResolverEnabled"] or LuckyHub:IsUsingAntiAim(LuckyHub.Locals.AimAssistTarget) then
+                LuckyHub.Locals.AimAssistAimPoint = Library.Flags["ResolverMethod"] == "Move Direction" and LuckyHub:MoveDirection("Aim Assist") or Library.Flags["ResolverMethod"] == "Velocity Recalculation" and LuckyHub:VelocityRecalculation("Aim Assist")
+            else
+                if Library.Flags["AimAssistClosestPart"] then
+                    LuckyHub.Locals.AimAssistHitPart = tostring(LuckyHub:GetClosestPart(LuckyHub.Locals.AimAssistTarget.Character))
+                else
+                    LuckyHub.Locals.AimAssistHitPart = Library.Flags["AimAssistHitPart"]
+                end
+                --
+                LuckyHub.Locals.AimAssistAimPoint = LuckyHub.Locals.AimAssistTarget.Character[LuckyHub.Locals.AimAssistHitPart].Position + LuckyHub.Locals.AimAssistTarget.Character[LuckyHub.Locals.AimAssistHitPart].Velocity * Library.Flags["AimAssistPredictionAmount"]
+                --
+                local Main = CFrame.new(workspace.CurrentCamera.CFrame.p, LuckyHub.Locals.AimAssistAimPoint)
+                --
+                if Library.Flags["AimAssistSmoothing"] then
+                    workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame:Lerp(Main, Library.Flags["AimAssistSmoothingAmount"], Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
+                else
+                    workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame:Lerp(Main, 1, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
+                end
+            end
+        end
+    end
+    --
+    function LuckyHub:AntiLock()
+
+    end
+end
+--
+
+local Main = Library:Window({Name = "LuckyHub", Side = "Center", CloseBind = Enum.KeyCode.LeftAlt, KeybindList = true, Watermark = true})
+--
+local MainTab = Main:CreateTab({Name = "Main", Icon = "rbxassetid://16863175349"})
+local UniversalTab = Main:CreateTab({Name = "Universal", Icon = "rbxassetid://16866569883"})
+local VisualsTab = Main:CreateTab({Name = "Visuals", Icon = "rbxassetid://16863266011"})
+local MiscTab = Main:CreateTab({Name = "Misc", Icon = "rbxassetid://16864702418"})
+local PlayersTab = Main:CreateTab({Name = "Players", Icon = "rbxassetid://16863267075", PlayerList = true})
+local SettingsTab = Main:CreateTab({Name = "Settings", Icon = "rbxassetid://16863267906"})
+--
+do -- Main Tab
+    local SilentAimSection = MainTab:Section({Name = "Silent Aim", Side = "Left"})
+    local FOVSection = MainTab:Section({Name = "FOV Settings", Side = "Left"})
+    local AimAssistSection = MainTab:Section({Name = "Aim Assist", Side = "Right"})
+    local ChecksSection = MainTab:Section({Name = "Checks", Side = "Right"})
+    local ExtraSection = MainTab:Section({Name = "Extra", Side = "Right"})
+    --
+    do -- Silent Aim
+        local SilentAimToggle = SilentAimSection:Toggle({Name = "Silent Aim Enabled", Flag = "SilentAimEnabled"})
+        SilentAimToggle:Keybind({Default = "Q"})
+        --
+        SilentAimSection:Toggle({Name = "Anti Aim Viewer", Default = true, Flag = "SilentAimAntiAimViewer"})
+        --
+        SilentAimSection:Toggle({Name = "Anti Curve", Default = true, Flag = "SilentAimAntiCurve"})
+        --
+        SilentAimSection:Toggle({Name = "No Ground Shots", Default = true, Flag = "SilentAimNoGroundShots"})
+        --
+        SilentAimSection:Toggle({Name = "Use FOV", Default = true, Flag = "SilentAimUseFOV"})
+        --
+        SilentAimSection:Slider({Name = "Field Of View", Flag = "SilentAimFieldOfView", Min = 1, Max = 300, Default = 150, Decimal = 0.1})
+        --
+        SilentAimSection:Dropdown({Name = "Predicition Type", Flag = "SilentAimPredictionType", Content = {"Custom", "Auto"}, Default = "Custom"})
+        --
+        SilentAimSection:Slider({Name = "Prediction Amount", Flag = "SilentAimPredictionAmount", Min = 0, Max = 0.2, Default = 0.135, Decimal = 0.001})
+        --
+        SilentAimSection:Toggle({Name = "Closest Part", Flag = "SilentAimClosestPart"})
+        --
+        SilentAimSection:Dropdown({Name = "Closest Part Mode", Flag = "SilentAimClosestPartMode", Content = {"Nearest Part", "Nearest Point"}, Default = "Nearest Part"})
+        --
+        SilentAimSection:Dropdown({Name = "Hit Part", Flag = "SilentAimHitPart", Content = {"Head", "HumanoidRootPart", "LowerTorso", "UpperTorso", "RightUpperLeg", "LeftUpperLeg", "RightLowerLeg", "LeftLowerLeg", "RightFoot", "LeftFoot", "LeftUpperArm", "RightUpperArm", "RightLowerArm", "LeftLowerArm", "LeftHand", "RightHand"}, Default = "HumanoidRootPart"})
+    end
+    --
+    do -- Aim Assist
+        local AimAssistToggle = AimAssistSection:Toggle({Name = "Aim Assist Enabled", Flag = "AimAssistEnabled"})
+        AimAssistToggle:Keybind({Default = "E", Flag = "Test"})
+        --
+        function LuckyHub:GetAimAssistKeybind()
+            return AimAssistToggle:GetKeybind()
+        end
+        --
+        AimAssistSection:Dropdown({Name = "Mode", Flag = "AimAssistMode", Content = {"FOV", "Target"}, Default = "Target", Callback = function(State)
+            if State == "Target" then
+                Library.Flags["AimAssistEnabled"] = true
+            end
+        end})
+        --
+        AimAssistSection:Toggle({Name = "Safe Mode", Default = true, Flag = "AimAssistSafeMode"})
+        --
+        AimAssistSection:Toggle({Name = "Smoothing", Default = true, Flag = "AimAssistSmoothing"})
+        --
+        AimAssistSection:Slider({Name = "Smoothing Amount", Flag = "AimAssistSmoothingAmount", Min = 0.001, Max = 1, Default = 0.1, Decimal = 0.001})
+        --
+        AimAssistSection:Toggle({Name = "Use FOV", Default = true, Flag = "AimAssistUseFOV"})
+        --
+        AimAssistSection:Slider({Name = "Field Of View", Flag = "AimAssistFieldOfView", Min = 1, Max = 300, Default = 100, Decimal = 0.1})
+        --
+        AimAssistSection:Slider({Name = "Prediction Amount", Flag = "AimAssistPredictionAmount", Min = 0, Max = 0.2, Default = 0.135, Decimal = 0.001})
+        --
+        AimAssistSection:Toggle({Name = "Closest Part", Flag = "AimAssistClosestPart"})
+        --
+        AimAssistSection:Dropdown({Name = "Hit Part", Flag = "AimAssistHitPart", Content = {"Head", "HumanoidRootPart", "LowerTorso", "UpperTorso", "RightUpperLeg", "LeftUpperLeg", "RightLowerLeg", "LeftLowerLeg", "RightFoot", "LeftFoot", "LeftUpperArm", "RightUpperArm", "RightLowerArm", "LeftLowerArm", "LeftHand", "RightHand"}, Default = "HumanoidRootPart"})
+    end
+    --
+    do -- FOV
+        local SilentAimFOV = FOVSection:Toggle({Name = "Silent Aim FOV", Flag = "SilentAimFOVEnabled", Default = true})
+        SilentAimFOV:ColorPicker({Name = "Silent Aim FOV Color", Flag = "SilentAimColor", Default = Color3.fromRGB(0, 255, 0)})
+        --
+        FOVSection:Dropdown({Name = "Silent Aim FOV Type", Flag = "SilentAimFOVType", Content = {"Mouse", "Sticky"}, Default = "Mouse"})
+        --
+        FOVSection:Slider({Name = "Silent Aim FOV Transparency", Flag = "SilentAimFieldOfViewTransparency", Min = 0, Max = 1, Default = 0.5, Decimal = 0.01})
+        --
+        local AimAssistFOV = FOVSection:Toggle({Name = "Aim Assist FOV", Flag = "AimAssistFOVEnabled", Default = false})
+        AimAssistFOV:ColorPicker({Name = "Aim Assist FOV Color", Flag = "AimAssistColor", Default = Color3.fromRGB(255, 255, 255)})
+        --
+        FOVSection:Slider({Name = "Aim Assist FOV Transparency", Flag = "AimAssistFieldOfViewTransparency", Min = 0, Max = 1, Default = 0.5, Decimal = 0.01})
+        --
+        local Tracer = FOVSection:Toggle({Name = "Tracer", Flag = "TracerEnabled", Default = false})
+        Tracer:ColorPicker({Name = "Tracer Color", Flag = "TracerColor", Default = Color3.fromRGB(255, 255, 255)})
+        --
+        FOVSection:Slider({Name = "Tracer Transparency", Flag = "TracerTransparency", Min = 0, Max = 1, Default = 1, Decimal = 0.01})
+        --
+        FOVSection:Slider({Name = "Tracer Thickness", Flag = "TracerThickness", Min = 0.1, Max = 5, Default = 1.5, Decimal = 0.1})
+    end
+    --
+    do -- Checks
+        ChecksSection:Toggle({Name = "Wall Check", Default = true, Flag = "WallCheck"})
+        --
+        ChecksSection:Toggle({Name = "Alive Check", Default = true, Flag = "AliveCheck"})
+        --
+        ChecksSection:Toggle({Name = "ForceField Check", Flag = "ForceFieldCheck"})
+        --
+        ChecksSection:Toggle({Name = "Knocked Check", Flag = "KnockedCheck"})
+        --
+        ChecksSection:Toggle({Name = "Crew Check", Flag = "CrewCheck"})
+        --
+        ChecksSection:Toggle({Name = "Friend Check", Flag = "FriendCheck"})
+    end
+    --
+    do -- Extra
+        ExtraSection:Toggle({Name = "Resolver", Flag = "ResolverEnabled"})
+        --
+        ExtraSection:Dropdown({Name = "Resolver Method", Flag = "ResolverMethod", Content = {"Move Direction", "Velocity Recalculation"}, Default = "Move Direction"})
+    end
+end
+--
+do -- Visuals
+    local PlayersVisualSection = VisualsTab:Section({Name = "Players", Side = "Left"})
+    local PlayersSettingsSection = VisualsTab:Section({Name = "Players Settings", Side = "Left"})
+    local CursorVisualSection = VisualsTab:Section({Name = "Cursor", Side = "Right"})
+    local WorldVisualSection = VisualsTab:Section({Name = "World", Side = "Right"})
+    --
+    do -- Players
+        local ESPEnabled = PlayersVisualSection:Toggle({Name = "ESP Enabled", Callback = function(State)
+            ESP.Enabled = State
+        end})
+        ESPEnabled:Keybind({Default = "H"})
+        --
+        local BoxSettings = PlayersVisualSection:Toggle({Name = "Box", Default = true, Callback = function(State)
+            ESP.BoxEnabled = State
+        end})
+        BoxSettings:ColorPicker({Name = "Box Color", Default = Color3.fromRGB(255, 255, 255), Callback = function(State)
+            ESP.BoxColor = State
+        end})
+        --
+        PlayersVisualSection:Dropdown({Name = "Box Type", Content = {"Corner", "2D"}, Default = "Corner", Callback = function(State)
+            if State == "Corner" then
+                ESP.BoxCorners = true
+            else
+                ESP.BoxCorners = false
+            end
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Name", Default = true, Callback = function(State)
+            ESP.TextLayout.name.enabled = State
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Tool", Default = true, Callback = function(State)
+            ESP.TextLayout.tool.enabled = State
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Distance", Default = true, Callback = function(State)
+            ESP.TextLayout.distance.enabled = State
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Health Bar", Default = true, Callback = function(State)
+            ESP.BarLayout.health.enabled = State
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Health Number", Callback = function(State)
+            ESP.TextLayout.health.enabled = State
+        end})
+        --
+        local HealthBarColorFull = PlayersVisualSection:Label({Message = "Health Bar Full"})
+        HealthBarColorFull:ColorPicker({Name = "Full Color", Default = Color3.fromRGB(0, 255, 0), Callback = function(State)
+            ESP.BarLayout.health.color_full = State
+        end})
+        --
+        local HealthBarColorEmpty = PlayersVisualSection:Label({Message = "Health Bar Empty"})
+        HealthBarColorEmpty:ColorPicker({Name = "Empty Color", Default = Color3.fromRGB(255, 0, 0), Callback = function(State)
+            ESP.BarLayout.health.color_empty = State
+        end})
+        --
+        local SkeletonSettings = PlayersVisualSection:Toggle({Name = "Skeletons", Default = true, Callback = function(State)
+            ESP.SkeletonEnabled = State
+        end})
+        SkeletonSettings:ColorPicker({Name = "Skeletons Color", Default = Color3.fromRGB(255, 255, 255), Callback = function(State)
+            ESP.SkeletonColor = State
+        end})
+        --
+        PlayersVisualSection:Toggle({Name = "Chams", Callback = function(State)
+            ESP.ChamsEnabled = State
+        end})
+        --
+        local ChamsInnerSettings = PlayersVisualSection:Label({Message = "Chams Inner Color"})
+        ChamsInnerSettings:ColorPicker({Name = "Inner Color", Default = Color3.fromRGB(0, 255, 0), Callback = function(State)
+            ESP.ChamsInnerColor = State
+        end})
+        --
+        local ChamsOutterSettings = PlayersVisualSection:Label({Message = "Chams Outer Color"})
+        ChamsOutterSettings:ColorPicker({Name = "Outer Color", Default = Color3.fromRGB(255, 255, 255), Callback = function(State)
+            ESP.ChamsOuterColor = State
+        end})
+        --
+        PlayersVisualSection:Slider({Name = "Chams Inner Transparency", Min = 0, Max = 1, Default = 0.5, Decimal = 0.01, Callback = function(State)
+            ESP.ChamsInnerTransparency = tonumber(State)
+        end})
+        --
+        PlayersVisualSection:Slider({Name = "Chams Outer Transparency", Min = 0, Max = 1, Default = 0.2, Decimal = 0.01, Callback = function(State)
+            ESP.ChamsOuterTransparency = tonumber(State)
+        end})
+    end
+    --
+    do -- Player Settings
+        PlayersSettingsSection:Toggle({Name = "Max Distance", Default = true, Callback = function(State)
+            ESP.MaxDistance = State
+        end})
+        --
+        PlayersSettingsSection:Slider({Name = "Max Distance Amount", Min = 50, Max = 2500, Default = 250, Decimal = 1, Callback = function(State)
+            ESP.MaxDistanceAmount = tonumber(State)
+        end})
+        --
+        local TextColorSettings = PlayersSettingsSection:Label({Message = "Text Color"})
+        TextColorSettings:ColorPicker({Name = "Text Color", Default = Color3.fromRGB(255, 255, 255), Callback = function(State)
+            ESP.TextColor = State
+        end})
+        --
+        PlayersSettingsSection:Toggle({Name = "Use Display Name", Default = true, Callback = function(State)
+            ESP.UseDisplay = State
+        end})
+        --
+        PlayersSettingsSection:Toggle({Name = "Wall Check", Default = false, Callback = function(State)
+            ESP.WallCheck = State
+        end})
+        --
+        PlayersSettingsSection:Toggle({Name = "Alive Check", Default = false, Callback = function(State)
+            ESP.AliveCheck = State
+        end})
+    end
+    --
+    do -- World
+        WorldVisualSection:Toggle({Name = "Remove Shadows", Flag = "VisualsShadows", Callback = Visuals.Refresh})
+        --
+        WorldVisualSection:Toggle({Name = "Ambience", Flag = "VisualsAmbience", Callback = Visuals.Refresh})
+        --
+        local WorldVisualsIndoorColor = WorldVisualSection:Label({Message = "Indoor Ambience Color"})
+        WorldVisualsIndoorColor:ColorPicker({Name = "Indoor Ambience Color", Flag = "VisualsAmbienceIndoor", Default = Color3.fromRGB(100, 200, 155), Callback = Visuals.Refresh})
+        --
+        local WorldVisualOutdoorColor = WorldVisualSection:Label({Message = "Outdoor Ambience Color"})
+        WorldVisualOutdoorColor:ColorPicker({Name = "Outdoor Ambience Color", Flag = "VisualsAmbienceOutdoor", Default = Color3.fromRGB(0, 255, 0), Callback = Visuals.Refresh})
+        --
+        local WorldVisualFog = WorldVisualSection:Toggle({Name = "Fog", Flag = "VisualsFog", Callback = Visuals.Refresh})
+        WorldVisualFog:ColorPicker({Name = "Fog Color", Flag = "VisualsFogColor", Default = Color3.fromRGB(0, 255, 0), Callback = Visuals.Refresh})
+        --
+        WorldVisualSection:Slider({Name = "Fog Start", Flag = "VisualsFogStart", Min = 0, Max = 5000, Default = 35, Decimal = 1, Callback = Visuals.Refresh})
+        --
+        WorldVisualSection:Slider({Name = "Fog End", Flag = "VisualsFogEnd", Min = 0, Max = 5000, Default = 350, Decimal = 1, Callback = Visuals.Refresh})
+    end
+    --
+    do -- Cursor
+        local CursorEnabled = CursorVisualSection:Toggle({Name = "Cursor Enabled", Callback = function(State)
+            Cursor.enabled = State
+        end})
+        CursorEnabled:ColorPicker({Name = "Cursor Color", Default = Color3.fromRGB(0, 255, 0), Callback = function(State)
+            Cursor.color = State
+        end})
+        --
+        CursorVisualSection:Dropdown({Name = "Cursor Method", Flag = "CursorMethod", Content = {"Mouse", "Sticky"}, Default = "Mouse"})
+        --
+        CursorVisualSection:Slider({Name = "Width", Min = 0.1, Max = 3, Default = 1, Decimal = 0.1, Callback = function(State)
+            Cursor.width = State
+        end})
+        --
+        CursorVisualSection:Slider({Name = "Length", Min = 5, Max = 25, Default = 10, Decimal = 0.1, Callback = function(State)
+            Cursor.length = State
+        end})
+        --
+        CursorVisualSection:Slider({Name = "Gap", Min = 5, Max = 25, Default = 10, Decimal = 0.1, Callback = function(State)
+            Cursor.radius = State
+        end})
+        --
+        CursorVisualSection:Toggle({Name = "Spinning", Default = true, Callback = function(State)
+            Cursor.spin = State
+        end})
+        --
+        CursorVisualSection:Slider({Name = "Spinning Speed", Min = 100, Max = 500, Default = 200, Callback = function(State)
+            Cursor.spin_speed = State
+        end})
+        --
+        CursorVisualSection:Dropdown({Name = "Easing Style", Content = {"Linear", "Sine", "Back", "Quad", "Quart", "Quint", "Bounce", "Elastic", "Exponential", "Circular", "Cubic"}, Default = "Back", Callback = function(State)
+            Cursor.spin_style = Enum.EasingStyle[State]
+        end})
+        --
+        CursorVisualSection:Toggle({Name = "Resize", Callback = function(State)
+            Cursor.resize = State
+        end})
+        --
+        CursorVisualSection:Slider({Name = "Resizing Speed", Min = 50, Max = 500, Default = 150, Callback = function(State)
+            Cursor.resize_speed = State
+        end})
+    end
+end
+--
+do -- Movement
+    local MiscAntilockSection = MiscTab:Section({Name = "Anti Lock", Side = "Left"})
+    local MiscPredChangerSection = MiscTab:Section({Name = "Prediction Changer", Side = "Left"})
+    local MiscMovementSection = MiscTab:Section({Name = "Movement", Side = "Right"})
+    local MiscAutoBuy = MiscTab:Section({Name = "Auto Buy", Side = "Right"})
+    local MiscExtraSection = MiscTab:Section({Name = "Extra", Side = "Right"})
+    --
+    do -- Anti Lock
+        local AntiLockDesync = MiscAntilockSection:Toggle({Name = "Desync", Flag = "DesyncEnabled"})
+        AntiLockDesync:Keybind({Default = "Z"})
+        --
+        MiscAntilockSection:Dropdown({Name = "Presets", Content = {"None", "Random", "Fluctuate"}, Default = "None"})
+        --
+        MiscAntilockSection:Slider({Name = "Velocity X", Flag = "DesyncX", Min = -10000, Max = 10000, Default = 5000, Decimal = 1})
+        --
+        MiscAntilockSection:Slider({Name = "Velocity Y", Flag = "DesyncY", Min = -10000, Max = 10000, Default = 5000, Decimal = 1})
+        --
+        MiscAntilockSection:Slider({Name = "Velocity Z", Flag = "DesyncZ", Min = -10000, Max = 10000, Default = 5000, Decimal = 1})
+        --
+        local NetworkDesync = MiscAntilockSection:Toggle({Name = "Network Desync", Flag = "NetworkDesyncEnabled"})
+        NetworkDesync:Keybind({Default = "N"})
+        --
+        MiscAntilockSection:Dropdown({Name = "Method", Flag = "NetworkDesyncMethod", Content = {"Method 1", "Method 2", "Method 3"}, Default = "Method 1"})
+    end
+    --
+    do -- Prediction Changer
+
+    end
+    --
+    do -- Movement
+        local MovementCFrame = MiscMovementSection:Toggle({Name = "CFrame Speed", Flag = "MovementCFrame"})
+        MovementCFrame:Keybind({Default = "X"})
+        --
+        MiscMovementSection:Slider({Name = "CFrame Speed Amount", Flag = "MovementCFrameAmount", Min = 0.1, Max = 10, Default = 1, Decimal = 0.1})
+        --
+        local MovementFlyEnabled = MiscMovementSection:Toggle({Name = "Fly", Flag = "MovementFly"})
+        MovementFlyEnabled:Keybind({Default = "F"})
+        --
+        MiscMovementSection:Slider({Name = "Fly Speed", Flag = "MovementFlySpeed", Min = 1, Max = 300, Default = 100, Decimal = 0.1})
+        --
+        MiscMovementSection:Toggle({Name = "Bunny Hop", Flag = "MovementBhop"})
+    end
+    --
+    do -- Auto Buy
+        MiscAutoBuy:Dropdown({Name = "Gun", Flag = "MiscGunOption", Content = {"Tactical Shotgun", "Revolver", "Double-Barrel", "Shotgun", "AK-47", "LMG", "P90"}, Default = "LMG"})
+        --
+        MiscAutoBuy:Button({Name = "Buy Gun", Flag = "MiscGunBuyButton"})
+        --
+        MiscAutoBuy:Dropdown({Name = "Ammo", Flag = "NetworkDesyncMethod", Content = {"Tactical Shotgun Ammo", "Revolver Ammo", "Double-Barrel Ammo", "Shotgun Ammo", "AK-47 Ammo", "LMG Ammo", "P90 Ammo"}, Default = "LMG Ammo"})
+        --
+        MiscAutoBuy:Button({Name = "Buy Ammo", Flag = "MiscAmmoBuyButton"})
+    end
+    --
+    do -- Extra
+        MiscExtraSection:Toggle({Name = "No Slow", Flag = "MovementNoSlowdown"})
+        --
+        MiscExtraSection:Toggle({Name = "No Recoil", Flag = "MiscNoRecoil"})
+        --
+        MiscExtraSection:Toggle({Name = "No Jump Cooldown", Flag = "MovementNoJumpCooldown"})
+        --
+        MiscExtraSection:Toggle({Name = "Anti Bag", Flag = "MiscAntiBag"})
+    end
+end
+--
+do -- Settings
+    local SettingsUI = SettingsTab:Section({Name = "UI"})
+    --
+    local WatermarkToggle = SettingsUI:Toggle({Name = "Watermark", Callback = function() Main:WatermarkVisibility() end})
+    local KeybindListToggle = SettingsUI:Toggle({Name = "Keybind List", Callback = function() Main:KeybindListVisibility() end})
+end
+--
+RunService.PreRender:Connect(function()
+    Utility:ThreadFunction(LuckyHub.UpdateFOV, "0x01")
+    Utility:ThreadFunction(LuckyHub.GetTarget, "0x02")
+    Utility:ThreadFunction(LuckyHub.CalculateAimpoint, "0x03")
+    Utility:ThreadFunction(LuckyHub.AutoPrediction, "0x04")
+    --
+    if Library.Flags["AimAssistEnabled"] and Library.Flags["AimAssistMode"] == "FOV" then
+        Utility:ThreadFunction(LuckyHub.GetAimAssistTarget, "0x05")
+    end
+    --
+    Utility:ThreadFunction(LuckyHub.AimAssist, "0x06")
+    --
+    Utility:ThreadFunction(LuckyHub.MemorySpoofer, "0x07")
+    --
+    Utility:ThreadFunction(Movement.Update, "0x10")
+end)
+--
+do -- UserInput
+    UserInputService.InputBegan:Connect(function(Input, Processed)
+        if not Processed then
+            if Input.KeyCode == Enum.KeyCode[tostring(LuckyHub:GetAimAssistKeybind()):upper()] then
+                if Library.Flags["AimAssistMode"] == "Target" then
+                    if LuckyHub.Locals.AimAssistTarget then
+                        LuckyHub.Locals.AimAssistTarget = nil
+                    else
+                        LuckyHub:GetAimAssistTarget()
+                    end
+                end
+            end
+        end
+    end)
+end
+--
+Client.CharacterAdded:Connect(function(Character)
+    repeat Wait() until Character:FindFirstChildOfClass("Humanoid")
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    --
+    Wait(0.5)
+    --
+    Character.ChildAdded:Connect(function(child)
+        if Library.Flags["MiscAntiBag"] and child.Name == "Christmas_Sock" then
+            child:Destroy()
+        end
+        --
+        if child:IsA("Tool") then
+            if LuckyHub.Locals.ToolConnection[1] == nil then
+                LuckyHub.Locals.ToolConnection[1] = child 
+            end
+
+            if LuckyHub.Locals.ToolConnection[1] ~= child and LuckyHub.Locals.ToolConnection[2] ~= nil then 
+                LuckyHub.Locals.ToolConnection[2]:Disconnect()
+                LuckyHub.Locals.ToolConnection[1] = child
+            end
+    
+            LuckyHub.Locals.ToolConnection[2] = child.Activated:Connect(function() 
+                if LuckyHub.Locals.Target ~= nil and Library.Flags["SilentAimAntiAimViewer"] then
+                    RemoteEvent:FireServer(CurrentGame.MouseArguments, LuckyHub.Locals.AimPoint)
+                end
+            end)
+        end
+    end)
+end)
+--
+ClientCharacter.ChildAdded:Connect(function(child)
+    if Library.Flags["MiscAntiBag"] and child.Name == "Christmas_Sock" then
+        child:Destroy()
+    end
+    --
+    if child:IsA("Tool") then
+        if LuckyHub.Locals.ToolConnection[1] == nil then
+            LuckyHub.Locals.ToolConnection[1] = child 
+        end
+
+        if LuckyHub.Locals.ToolConnection[1] ~= child and LuckyHub.Locals.ToolConnection[2] ~= nil then 
+            LuckyHub.Locals.ToolConnection[2]:Disconnect()
+            LuckyHub.Locals.ToolConnection[1] = child
+        end
+
+        LuckyHub.Locals.ToolConnection[2] = child.Activated:Connect(function() 
+            if LuckyHub.Locals.Target ~= nil and Library.Flags["SilentAimAntiAimViewer"] then
+                RemoteEvent:FireServer(CurrentGame.MouseArguments, LuckyHub.Locals.AimPoint)
+            end
+        end)
+    end
+end)
+--
+do -- Hooks
+    local oldNamecall
+    --
+    oldNamecall = hookmetamethod(game, "__namecall", function(...)
+        local args = {...};
+        local method = getnamecallmethod();
+        if method == "FireServer" and args[2] == CurrentGame.MouseArguments then
+            if LuckyHub.Locals.Target ~= nil and LuckyHub.Locals.AimPoint ~= nil and not Library.Flags["SilentAimAntiAimViewer"] then
+                args[3] = LuckyHub.Locals.AimPoint
+            end
+            return oldNamecall(unpack(args))
+        end
+        return oldNamecall(...)
+    end)
+end
+--
+Library:Init()
+--
+if ExecutionTime then
+	Library:Notify(("Succesfully loaded in %s seconds."):format(string.format("%.".."4".."f", os.clock() - ExecutionTime)), 3)
+end
